@@ -1,138 +1,119 @@
-<<<<<<< Current (Your changes)
-# Omnissa Horizon Designer
-
-This is a React application built with Vite and Tailwind CSS.
-
-## Setup
-
-1.  Install dependencies:
-    ```bash
-    npm install
-    ```
-
-2.  Configure Firebase (Optional for offline mode, required for saving):
-    Create a `.env` file in the root directory with your Firebase configuration:
-    ```env
-    VITE_FIREBASE_CONFIG={"apiKey":"YOUR_API_KEY", ...}
-    VITE_APP_ID=your-app-id
-    ```
-    Or simply update `src/App.jsx` with your config object directly.
-
-## Running
-
-Start the development server:
-```bash
-npm run dev
-```
-
-Build for production:
-```bash
-npm run build
-```
-
-## Features
-
--   Drag and drop architecture diagramming
--   Tailwind CSS styling with Dark Mode
--   PDF and JSON Export
--   Firebase integration for saving designs
-=======
 # Omnissa Horizon Designer Pro
 
 A professional architecture diagram tool for designing Omnissa Horizon, Workspace ONE UEM, VMware VCF, and related infrastructure deployments.
 
-## Features
+## 🚀 Quick Start
 
-- **Drag & Drop Components** - Extensive library of pre-built stencils for:
-  - Workspace ONE UEM (Console, Device Services, API Server, etc.)
-  - Omnissa Horizon (Connection Servers, UAG, Horizon Agents, etc.)
-  - Pools & Farms (Persistent/Non-Persistent Pools, RDSH Farms)
-  - VCF & Aria Suite (SDDC Manager, Aria Operations, NSX components)
-  - Virtualization (vCenter, ESXi, vSAN, NSX Manager)
-  - Infrastructure (Active Directory, SQL, DNS, NTP, etc.)
-  - Networking (Firewalls, Load Balancers, Switches, Routers)
-  - Cloud Providers (Azure, AWS, Google Cloud)
-  - Zones & Areas (LAN, DMZ, Cloud)
-  - Endpoints (Users, Thin Clients, Laptops, Mobile)
-
-- **Smart Connections** - Automatic port/protocol labeling for known component relationships
-- **Pan & Zoom** - Navigate large diagrams with smooth pan/zoom controls
-- **Multi-Select** - Select multiple nodes with Ctrl/Cmd+Click or drag selection box
-- **Dark Mode** - Toggle between light and dark themes
-- **Export Options**:
-  - JSON export/import for design backup and sharing
-  - PDF export with diagram and connection details table
-- **Firebase Integration** - Optional cloud storage for designs (requires configuration)
-
-## Quick Start
-
-1. Open `index.html` in a modern web browser, or
-2. Serve the files with any HTTP server:
+### Local Development
 
 ```bash
-# Using Python
-python3 -m http.server 8080
+# Install dependencies
+npm install
 
-# Using Node.js (npx)
-npx serve .
+# Start development server
+npm run dev
 
-# Using PHP
-php -S localhost:8080
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
-3. Navigate to `http://localhost:8080`
+## 📦 Deployment to Vercel
 
-## Usage
+### Option 1: Deploy from GitHub (Recommended)
 
-### Adding Components
-- **Click** on a component in the left sidebar to add it to the canvas center
-- **Drag & Drop** components from the sidebar to a specific location
+1. Push your code to a GitHub repository
+2. Go to [vercel.com](https://vercel.com) and sign in
+3. Click "Add New Project"
+4. Import your GitHub repository
+5. Vercel will auto-detect the Vite framework
+6. Click "Deploy"
 
-### Creating Connections
-1. Click the **Zap** (⚡) tool in the toolbar
-2. Click and drag from one component to another
-3. Release to create the connection
+The `vercel.json` file is already configured to:
+- Use `npm run build` as the build command
+- Output to the `dist` directory
+- Use Vite as the framework
 
-### Editing
-- **Select** components or connections to view/edit properties in the right panel
-- **Customize** colors, opacity, labels, and connection directions
-- **Resize** zones/nodes using the corner handle when selected
-- **Duplicate** with Ctrl/Cmd+D
-- **Delete** with Delete/Backspace keys
+### Option 2: Deploy via CLI
 
-### Navigation
-- **Pan** using the Hand tool or scroll
-- **Zoom** with Ctrl/Cmd+Scroll or the +/- buttons
-- **Reset View** with the maximize button
+```bash
+# Install Vercel CLI
+npm i -g vercel
 
-## Keyboard Shortcuts
+# Deploy
+vercel
 
-| Shortcut | Action |
-|----------|--------|
-| Ctrl/Cmd + D | Duplicate selection |
-| Delete/Backspace | Delete selection |
-| Ctrl/Cmd + Scroll | Zoom in/out |
-
-## Browser Requirements
-
-- Modern browser with ES6+ support
-- Chrome, Firefox, Safari, Edge (latest versions)
-
-## Firebase Configuration (Optional)
-
-To enable cloud storage, set the following global variables before the app loads:
-
-```javascript
-window.__firebase_config = JSON.stringify({
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  // ... other config
-});
-window.__app_id = "your-app-id";
+# Deploy to production
+vercel --prod
 ```
 
-## License
+## ✨ Features
 
-MIT License - Feel free to use and modify for your needs.
->>>>>>> Incoming (Background Agent changes)
+### Component Library
+- **Workspace ONE UEM** - Console, Device Services, API Server, Database, Cloud Connector, UAG Tunnel/SEG, ENS, WS1 Access
+- **Omnissa Horizon** - Connection Server, UAG Appliance, Horizon Agent, App Volumes, DEM, Cloud Connector
+- **Pools & Farms** - Persistent/Non-Persistent Pools, RDSH Farms, Recording Server
+- **VCF & Aria Suite** - SDDC Manager, Aria Operations/Automation/Logs/Lifecycle, NSX Edge/Tier-0/Tier-1
+- **Virtualization** - vCenter, ESXi, vSAN, NSX Manager, Datastores, Resource Pools
+- **Infrastructure** - Active Directory, SQL, DNS, NTP, Syslog, CA, KMS, File Shares
+- **Networking** - Firewalls, Load Balancers, Switches, Routers, VPN
+- **Cloud Providers** - Azure, AWS, Google Cloud
+- **Zones & Areas** - LAN Zone, DMZ Zone, Cloud/Internet
+- **Endpoints** - Users, Thin Clients, Laptops, Mobile Devices
+
+### Editor Features
+- **Drag & Drop** - Add components from the palette to the canvas
+- **Smart Connections** - Automatic port/protocol labeling based on component types
+- **Multi-select** - Ctrl/Cmd+click or drag selection box
+- **Duplicate** - Ctrl/Cmd+D to duplicate selected items
+- **Pan & Zoom** - Mouse wheel to zoom, drag with Pan tool
+- **Dark Mode** - Toggle between light and dark themes
+- **Multiple Backgrounds** - Dots, Grid, Pixels, or Clear
+
+### Export Options
+- **JSON** - Save and load designs as JSON files
+- **PDF** - Export diagram with connection details table
+
+### Data Storage
+- Designs are saved to browser localStorage
+- Import/Export JSON for sharing
+
+## 🏗️ Project Structure
+
+```
+├── index.html              # Entry HTML
+├── package.json            # Dependencies and scripts
+├── vite.config.js          # Vite configuration
+├── tailwind.config.js      # Tailwind CSS configuration
+├── postcss.config.js       # PostCSS configuration
+├── vercel.json             # Vercel deployment configuration
+├── public/
+│   └── favicon.svg         # App icon
+└── src/
+    ├── main.jsx            # React entry point
+    ├── App.jsx             # Main application component
+    ├── index.css           # Global styles with Tailwind
+    ├── constants.js        # Stencil categories and settings
+    ├── utils.js            # Helper functions and exports
+    └── components/
+        ├── Icon.jsx            # Dynamic Lucide icon component
+        ├── StencilPalette.jsx  # Component palette sidebar
+        ├── DraggableWindow.jsx # Floating window component
+        ├── TrafficLegend.jsx   # Network traffic legend
+        └── ColorLegend.jsx     # Connection color legend
+```
+
+## 🛠️ Technology Stack
+
+- **React 18** - UI framework
+- **Vite** - Build tool and dev server
+- **Tailwind CSS** - Styling
+- **Lucide React** - Icon library
+- **jsPDF** - PDF generation
+- **html2canvas** - Canvas capture for PDF
+
+## 📝 License
+
+MIT License
