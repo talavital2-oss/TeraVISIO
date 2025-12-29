@@ -1,13 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Omnissa Horizon Designer - Pro</title>
-  </head>
-  <body class="h-screen w-screen overflow-hidden bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300 select-none">
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#1e293b', 950: '#020617' }
+                    },
+                    cursor: {
+                        'grab': 'grab',
+                        'grabbing': 'grabbing',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        window.firebaseModules = { 
+            initializeApp, getAuth, signInAnonymously, signInWithCustomToken, 
+            onAuthStateChanged, signOut, getFirestore, collection, 
+            addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, writeBatch
+        };
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body { font-family: 'Inter', sans-serif; overscroll-behavior: none; overflow: hidden; }
+
+        .bg-pattern-dots { background-image: radial-gradient(rgba(148, 163, 184, 0.4) 1.5px, transparent 1.5px); }
+        .dark .bg-pattern-dots { background-image: radial-gradient(rgba(148, 163, 184, 0.15) 1.5px, transparent 1.5px); }
+        .bg-pattern-grid { background-image: linear-gradient(to right, rgba(203, 213, 225, 0.6) 1px, transparent 1px), linear-gradient(to bottom, rgba(203, 213, 225, 0.6) 1px, transparent 1px); }
+        .dark .bg-pattern-grid { background-image: linear-gradient(to right, rgba(51, 65, 85, 0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(51, 65, 85, 0.5) 1px, transparent 1px); }
+        .bg-pattern-pixels { background-image: linear-gradient(rgba(148, 163, 184, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.2) 1px, transparent 1px); }
+        .dark .bg-pattern-pixels { background-image: linear-gradient(rgba(71, 85, 105, 0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(71, 85, 105, 0.25) 1px, transparent 1px); }
+        .bg-pattern-clear { background-image: none; }
+
+        .island-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0,0,0,0.03); }
+        .dark .island-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255,255,255,0.05); }
+
+        .node-container:hover .icon-box { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .dark .node-container:hover .icon-box { box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+        .icon-box { transition: all 0.1s linear; border: 1px solid transparent; }
+        .node-selected .icon-box { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+
+        .zone-container { border: 2px dashed; transition: border-color 0.2s; }
+        .resize-handle { width: 16px; height: 16px; background: white; border: 2px solid #3b82f6; border-radius: 4px; position: absolute; right: -8px; bottom: -8px; cursor: nwse-resize; z-index: 50; box-shadow: 0 2px 4px rgba(0,0,0,0.1); touch-action: none; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        
+        .connector-hit:hover { stroke: rgba(59, 130, 246, 0.2); stroke-width: 20; cursor: pointer; }
+        .port-label { font-size: 9px; font-weight: 600; text-anchor: middle; pointer-events: none; font-family: 'Inter', sans-serif; cursor: move; }
+        .port-label-group { cursor: move; touch-action: none; }
+        .edge-handle { stroke: #3b82f6; stroke-width: 2; cursor: move; transition: r 0.1s; touch-action: none; }
+        .edge-handle:hover { r: 8; }
+        .snap-dot { fill: #ec4899; stroke: white; stroke-width: 2; pointer-events: none; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { r: 4; opacity: 1; } 50% { r: 6; opacity: 0.8; } 100% { r: 4; opacity: 1; } }
+        .canvas-world { transform-origin: 0 0; will-change: transform; }
+        .accordion-content { transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; }
+
+        .selection-box {
+            position: absolute;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            pointer-events: none;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300 select-none">
     <div id="root" class="h-full w-full"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+    <script type="text/babel" src="app.jsx"></script>
+</body>
 </html>
 
